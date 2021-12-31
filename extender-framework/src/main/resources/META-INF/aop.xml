@@ -1,0 +1,10 @@
+<aspectj>
+    <aspects>
+        <aspect name="info.pzss.zomboid.extender.framework.advice.ConfigAdvice"/>
+        <aspect name="info.pzss.zomboid.extender.framework.advice.LifecycleAdvice"/>
+        <aspect name="info.pzss.zomboid.extender.framework.advice.LoggerAdvice"/>
+
+        <weaver options="-verbose -showWeaveInfo">
+        </weaver>
+    </aspects>
+</aspectj>
