@@ -95,10 +95,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradleVersion:
-          - 6.6.1
-          - 6.9.1
-          - 7.3
         os:
           - windows-latest
           - ubuntu-latest
@@ -142,7 +138,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.gradleVersion }}-${{ runner.os }}
+          name: test-results-${{ runner.os }}
           path: ${{ github.workspace }}/build/reports/tests
 
   build:
