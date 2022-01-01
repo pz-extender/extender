@@ -119,7 +119,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ runner.workspace }}/zomboid
-          key: ${{ hashFiles('.github/current.pzversion') }}
+          key: pz-${{ hashFiles('**/current.pzversion') }}
 
       - name: Install Project Zomboid
         run: |
@@ -186,7 +186,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ runner.workspace }}/zomboid
-          key: ${{ hashFiles('.github/current.pzversion') }}
+          key: pz-${{ hashFiles('**/current.pzversion') }}
 
       - name: Install Project Zomboid
         run: |
