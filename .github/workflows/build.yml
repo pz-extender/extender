@@ -21,7 +21,14 @@ jobs:
 
   zomboidInstallation:
     name: Download Project Zomboid Server
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
     steps:
       - name: Setup steamcmd
         uses: CyberAndrii/setup-steamcmd@v1
@@ -30,7 +37,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ runner.workspace }}/zomboid
-          key: ${{ hashFiles('.github/current.pzversion') }}
+          key: pz-${{ matrix.os }}-${{ hashFiles('.github/current.pzversion') }}
 
       - name: Install Project Zomboid
         run: |
@@ -60,7 +67,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ runner.workspace }}/zomboid
-          key: ${{ hashFiles('.github/current.pzversion') }}
+          key: pz-ubuntu-latest-${{ hashFiles('**/current.pzversion') }}
 
       - name: Install Project Zomboid
         run: |
@@ -119,7 +126,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ runner.workspace }}/zomboid
-          key: pz-${{ hashFiles('**/current.pzversion') }}
+          key: pz-${{ matrix.os }}-${{ hashFiles('**/current.pzversion') }}
 
       - name: Install Project Zomboid
         run: |
@@ -186,7 +193,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ runner.workspace }}/zomboid
-          key: pz-${{ hashFiles('**/current.pzversion') }}
+          key: pz-ubuntu-latest-${{ hashFiles('**/current.pzversion') }}
 
       - name: Install Project Zomboid
         run: |
