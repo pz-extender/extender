@@ -3,13 +3,13 @@
 _Project Zomboid Extender_ is an extension framework for Project Zomboid. It aims to expose more of the game than is
 currently available for modding and introduce its own developer experience and quality of life features.
 
-The work here is largely inspired by the work started at [PzStorm](https://github.com/pzstorm/storm).
+The work here is largely inspired by the work started at [Zomboid Storm](https://github.com/pzstorm/storm).
 
 ## Features
 
 ### Configuring server vars from environment variables
 
-All of Project Zomboid's dedicated server options can be configured via an environment variable instead of editing
+All of Project Zomboid's dedicated server options can be configured via an environment variable in addition to editing
 server.ini. Where an environment variable is available, it takes precedence over any option set in the ini file.
 
 Server options are prefixed with `ZOMBOID_` and converted to `UPPER_SNAKE_CASE`. For example, to set FireSpread=false

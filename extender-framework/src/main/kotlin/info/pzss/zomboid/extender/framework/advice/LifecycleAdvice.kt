@@ -1,6 +1,7 @@
 package info.pzss.zomboid.extender.framework.advice
 
-import info.pzss.zomboid.extender.framework.ZomboidExtenderContext
+import info.pzss.zomboid.extender.framework.ZomboidExtensionBootstrap
+import info.pzss.zomboid.extender.framework.ZomboidExtensionContext
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -9,12 +10,12 @@ import org.aspectj.lang.annotation.Aspect
 open class LifecycleAdvice {
     @Suppress("NOTHING_TO_INLINE")
     inline fun startupAndShutdown(joinPoint: ProceedingJoinPoint) {
-        ZomboidExtenderContext.bootstrap()
+        ZomboidExtensionContext.INSTANCE = ZomboidExtensionBootstrap().bootstrap()
 
         try {
             joinPoint.proceed()
         } finally {
-            ZomboidExtenderContext.shutdown()
+            ZomboidExtensionContext.INSTANCE.release()
         }
     }
 

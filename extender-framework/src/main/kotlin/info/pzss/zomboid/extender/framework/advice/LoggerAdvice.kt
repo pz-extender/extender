@@ -23,11 +23,6 @@ open class LoggerAdvice {
     val loggerNames = IdentityHashMap<ZLogger, String>()
     val errorLogger = KotlinLogging.logger("ErrorLogger")
 
-    @After("initialization(public zombie.core.logger.ZLogger.new(..))")
-    fun captureLoggerName(joinPoint: JoinPoint) {
-        loggerNames[joinPoint.`this` as ZLogger?] = joinPoint.args[0] as String
-    }
-
     @Suppress("NOTHING_TO_INLINE")
     inline fun loggerFor(name: String) = loggerCache.computeIfAbsent(name) { LoggerFactory.getLogger(name) }
 
@@ -38,25 +33,32 @@ open class LoggerAdvice {
         val logger = loggerFor(name)
 
         val args = joinPoint.args.toMutableList()
+        val exception = args.removeIf { it is Throwable }
+
         val formatArgs = when {
             args.size == 2 && args[1] is Array<*> -> args[1] as Array<*>
             args.size == 2 -> arrayOf(args[1])
             else -> emptyArray<Any>()
         }
 
-        val format = args[0] as String
+        val format = args[0] as? String ?: "No log message provided"
         val message = if(formatArgs.isNotEmpty()) format.format(*formatArgs) else format
 
         when (level) {
-            Level.WARN -> logger.warn(message)
-            Level.DEBUG -> logger.debug(message)
-            Level.INFO -> logger.info(message)
-            Level.TRACE -> logger.trace(message)
-            Level.ERROR -> logger.error(message)
+            Level.WARN -> logger.warn(message, exception)
+            Level.DEBUG -> logger.debug(message, exception)
+            Level.INFO -> logger.info(message, exception)
+            Level.TRACE -> logger.trace(message, exception)
+            Level.ERROR -> logger.error(message, exception)
         }
     }
 
-    @Around("execution (public void zombie.core.logger.ExceptionLogger.logException(Throwable, String, ..) && args(exception, message, ..)")
+    @After("initialization(public zombie.core.logger.ZLogger.new(..))")
+    fun captureLoggerName(joinPoint: JoinPoint) {
+        loggerNames[joinPoint.`this` as ZLogger?] = joinPoint.args[0] as String
+    }
+
+    @Around("execution (public void zombie.core.logger.ExceptionLogger.logException(Throwable, String, ..)) && args(exception, message, ..)")
     fun exceptionLog(joinPoint: ProceedingJoinPoint, exception: Throwable, message: String?) {
         errorLogger.error(message ?: exception.message, exception)
     }
@@ -71,10 +73,8 @@ open class LoggerAdvice {
     }
 
     @Around("execution (public void zombie.debug.DebugLog.log(zombie.debug.DebugType, String)) && args(debugType, message)")
-    fun scopedDebugLog(joinPoint: ProceedingJoinPoint, debugType: DebugType, message: String) {
-        val logger = loggerFor(debugType.name)
-        logger.info(message)
-    }
+    fun scopedDebugLog(joinPoint: ProceedingJoinPoint, debugType: DebugType, message: String)
+        = loggerFor(debugType.name).info(message)
 
     @Around("execution (public void zombie.debug.DebugLogStream.warn(..))")
     fun debugLogWarn(joinPoint: ProceedingJoinPoint) = doDebugLog(joinPoint, Level.WARN)

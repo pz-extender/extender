@@ -7,17 +7,30 @@ plugins {
 val aspectj by configurations.creating
 
 dependencies {
+    api(project(":extender-api"))
+    implementation("org.junit.jupiter:junit-jupiter:5.7.0")
+
     compileOnly(pzGameApi())
-    aspectj("org.aspectj:aspectjweaver:1.9.7")
+    compileOnly(pzGameLibs())
+    runtimeOnly(pzGameRuntime())
+
+    implementation(kotlin("scripting-jvm-host"))
+    implementation(kotlin("scripting-jvm"))
+    implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+
     implementation("org.aspectj:aspectjrt:1.9.7")
-    implementation("com.google.guava:guava:31.0.1-jre")
+    aspectj("org.aspectj:aspectjweaver:1.9.7")
+
+    implementation("io.github.classgraph:classgraph:4.8.138")
+
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("ch.qos.logback:logback-classic:1.2.10")
     implementation("ch.qos.logback:logback-core:1.2.10")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
-    runtimeOnly("org.fusesource.jansi:jansi:1.18")
-}
 
+    implementation("com.google.guava:guava:31.0.1-jre")
+}
 
 tasks.create<ProjectZomboidLaunchTask>("pzLaunch64") {
     launchType.set(ProjectZomboidLaunchTask.LaunchType.CLIENT)
