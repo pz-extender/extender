@@ -2,6 +2,7 @@ import info.pzss.zomboid.gradle.ProjectZomboidLaunchTask
 
 plugins {
     kotlin("jvm")
+    `maven-publish`
 }
 
 val aspectj by configurations.creating
@@ -33,7 +34,6 @@ dependencies {
 }
 
 tasks.create<ProjectZomboidLaunchTask>("pzLaunch64") {
-    launchType.set(ProjectZomboidLaunchTask.LaunchType.CLIENT)
     additionalJvmArgs.set(
         listOf(
             "-javaagent:${aspectj.asPath}",

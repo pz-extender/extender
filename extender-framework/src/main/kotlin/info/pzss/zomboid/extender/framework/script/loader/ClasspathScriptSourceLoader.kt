@@ -10,7 +10,11 @@ class ClasspathScriptSourceLoader : ZomboidScriptSourceLoader {
     override suspend fun load() = flow {
         val classGraph = ClassGraph()
 
-        classGraph.enableClassInfo().scan().use { scanResult ->
+        val scan = classGraph
+            .enableClassInfo()
+            .acceptClasspathElementsContainingResourcePath("media/pz-script/*")
+            .scan()
+        scan.use { scanResult ->
             scanResult.getResourcesWithExtension("kts")
                 .filter { it.path.endsWith("pz.kts") }
                 .forEach { emit(ZomboidScriptSource.SourceResource(it)) }

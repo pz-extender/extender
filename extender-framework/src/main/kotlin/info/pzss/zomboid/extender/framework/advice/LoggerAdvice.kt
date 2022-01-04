@@ -42,7 +42,7 @@ open class LoggerAdvice {
         }
 
         val format = args[0] as? String ?: "No log message provided"
-        val message = if(formatArgs.isNotEmpty()) format.format(*formatArgs) else format
+        val message = if (formatArgs.isNotEmpty()) format.format(*formatArgs) else format
 
         when (level) {
             Level.WARN -> logger.warn(message, exception)
@@ -73,8 +73,8 @@ open class LoggerAdvice {
     }
 
     @Around("execution (public void zombie.debug.DebugLog.log(zombie.debug.DebugType, String)) && args(debugType, message)")
-    fun scopedDebugLog(joinPoint: ProceedingJoinPoint, debugType: DebugType, message: String)
-        = loggerFor(debugType.name).info(message)
+    fun scopedDebugLog(joinPoint: ProceedingJoinPoint, debugType: DebugType, message: String) =
+        loggerFor(debugType.name).info(message)
 
     @Around("execution (public void zombie.debug.DebugLogStream.warn(..))")
     fun debugLogWarn(joinPoint: ProceedingJoinPoint) = doDebugLog(joinPoint, Level.WARN)

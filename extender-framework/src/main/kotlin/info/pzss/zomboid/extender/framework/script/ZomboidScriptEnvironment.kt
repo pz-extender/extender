@@ -2,13 +2,12 @@ package info.pzss.zomboid.extender.framework.script
 
 import info.pzss.zomboid.extender.api.ZomboidScript
 import info.pzss.zomboid.extender.api.event.ZomboidScriptEventRegistrationContext
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
-import java.nio.file.FileSystems
-import java.nio.file.WatchService
 import kotlin.script.experimental.api.implicitReceivers
 import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate

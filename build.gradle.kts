@@ -1,23 +1,21 @@
-import info.pzss.zomboid.gradle.ProjectZomboidLaunchTask
-import info.pzss.zomboid.gradle.ProjectZomboidLaunchTask.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.jetbrains.gradle.plugin.idea-ext") version ("1.1.1")
-    id("info.pzss.zomboid") version ("0.1.2")
+    id("info.pzss.zomboid") version ("0.1.3")
     kotlin("jvm") version ("1.6.10") apply (false)
+    `maven-publish`
 }
 
-val zomboidPath : String by project
-val projectVersion : String by project
+fun Project.properties(key: String) = findProperty(key)?.toString()
 
 projectZomboid {
-    gamePath.set(zomboidPath)
+    zomboidPath.set(properties("zomboidPath"))
 }
 
 allprojects {
     group = "info.pzss.zomboid.extender"
-    version = projectVersion
+    description = properties("description")
+    version = properties("version")
 
     repositories {
         mavenCentral()
@@ -26,14 +24,14 @@ allprojects {
 
     plugins.withType<JavaPlugin>() {
         configure<JavaPluginExtension> {
-            sourceCompatibility = JavaVersion.VERSION_15
-            targetCompatibility = JavaVersion.VERSION_15
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
         }
     }
 
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            jvmTarget = "15"
+            jvmTarget = "11"
         }
     }
 

@@ -5,8 +5,6 @@ import info.pzss.zomboid.extender.framework.script.event.ZomboidScriptEventFacto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.lang.ClassCastException
-import java.lang.reflect.InvocationTargetException
 
 class TestEvent(val test: String, val test2: Int) : ZomboidScriptEvent
 class NoArgsEvent : ZomboidScriptEvent

@@ -8,7 +8,9 @@ import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchKey
 import java.nio.file.WatchService
 import kotlin.io.path.toPath
-import kotlin.script.experimental.api.*
+import kotlin.script.experimental.api.ScriptCompilationConfiguration
+import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.implicitReceivers
 import kotlin.script.experimental.host.BasicScriptingHost
 import kotlin.script.experimental.host.FileScriptSource
 import kotlin.script.experimental.host.UrlScriptSource
@@ -85,7 +87,7 @@ sealed interface ZomboidScriptSource {
         evaluationConfiguration: ScriptEvaluationConfiguration
     )
 
-    fun name() : String
+    fun name(): String
 
     fun watchChanges(watcher: WatchService): ZomboidScriptSourceWatcher
 }

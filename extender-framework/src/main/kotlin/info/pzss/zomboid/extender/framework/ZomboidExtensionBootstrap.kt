@@ -11,7 +11,7 @@ class ZomboidExtensionBootstrap {
         val eventMetaResolver = ZomboidScriptEventMetaResolver()
         val eventDispatcher = ZomboidScriptEventDispatcher(eventMetaResolver)
 
-        val scriptEnvironment = ZomboidScriptEnvironment(eventDispatcher, /*true*/)
+        val scriptEnvironment = ZomboidScriptEnvironment(eventDispatcher /*true*/)
         scriptEnvironment.load(ClasspathScriptSourceLoader())
 
         return ZomboidExtensionContext(eventDispatcher)

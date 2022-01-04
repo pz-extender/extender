@@ -7,10 +7,11 @@ The work here is largely inspired by the work started at [Zomboid Storm](https:/
 
 ## Features
 
-
 ### Kotlin Scripting
 
-Scripting with Kotlin offers direct unrestricted access to the Zomboid java environment while being able to listen to the same events that Lua scripts can. Additionally, integration with IntelliJ provides a much improved development experience for script authors.
+Scripting with Kotlin offers direct unrestricted access to the Zomboid java environment while being able to listen to
+the same events that Lua scripts can. Additionally, integration with IntelliJ provides a much improved development
+experience for script authors.
 
 ![Kotlin Scripting offers enhanced code assistance](https://github.com/pz-extender/extender/blob/master/media/kotlin-scripting-code-assistance.png?raw=true)
 
