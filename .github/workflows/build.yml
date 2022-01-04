@@ -209,7 +209,7 @@ jobs:
           ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
 
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build -PzomboidPath=${{ runner.workspace }}/zomboid
 
   # Prepare a draft release for GitHub Releases page for the manual verification
   # If accepted and published, release workflow would be triggered
