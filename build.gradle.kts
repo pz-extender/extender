@@ -19,7 +19,7 @@ changelog {
 }
 
 allprojects {
-    group = "info.pzss.zomboid.extender"
+    group = properties("group")
     description = properties("description")
     version = properties("version")
 
@@ -28,8 +28,73 @@ allprojects {
         pzLocal()
     }
 
+    plugins.withType<MavenPublishPlugin> {
+        configure<PublishingExtension> {
+            repositories {
+                maven {
+                    val releasesRepoUrl = "https://s01.oss.sonatype.org/content/repositories/releases/"
+                    val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+
+                    url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
+                    credentials(PasswordCredentials::class)
+                }
+            }
+
+            publications.withType<MavenPublication> {
+                artifactId = project.name
+
+                pom {
+                    url.set("https://github.com/pz-extender/")
+                    inceptionYear.set("2022")
+
+                    organization {
+                        name.set("Project Zomboid Extender Authors")
+                        url.set("https://github.com/pz-extender/")
+                    }
+
+                    licenses {
+                        license {
+                            name.set("Apache Software License 2.0")
+                            url.set("https://opensource.org/licenses/Apache-2.0")
+                        }
+
+                        license {
+                            name.set("MIT License")
+                            url.set("https://opensource.org/licenses/MIT")
+                        }
+                    }
+
+                    scm {
+                        connection.set("scm:git:https://github.com/pz-extender/extender.git")
+                        developerConnection.set("scm:git:git@github.com:pz-extender/extender.git")
+                        url.set("https://github.com/pz-extender/extender.git")
+                    }
+
+                    issueManagement {
+                        system.set("GitHub")
+                        url.set("https://github.com/pz-extender/extender/issues")
+                    }
+
+                    ciManagement {
+                        system.set("GitHub Actions")
+                        url.set("https://github.com/pz-extender/extender/actions")
+                    }
+                }
+            }
+        }
+    }
+
+    plugins.withType<SigningPlugin> {
+        configure<SigningExtension> {
+            useGpgCmd()
+        }
+    }
+
     plugins.withType<JavaPlugin>() {
         configure<JavaPluginExtension> {
+            withSourcesJar()
+            withJavadocJar()
+
             sourceCompatibility = JavaVersion.VERSION_11
             targetCompatibility = JavaVersion.VERSION_11
         }

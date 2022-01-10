@@ -3,6 +3,7 @@ import info.pzss.zomboid.gradle.ProjectZomboidLaunchTask
 plugins {
     kotlin("jvm")
     `maven-publish`
+    signing
 }
 
 val aspectj by configurations.creating
@@ -32,6 +33,26 @@ dependencies {
     implementation("com.google.guava:guava:31.0.1-jre")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
+}
+
+publishing {
+    publications.create<MavenPublication>("maven") {
+        from(components["java"])
+
+        pom {
+            packaging = "jar"
+            name.set("Project Zomboid Extender Framework")
+            description.set(
+                """
+                Extension framework and patcher to aid in extending Project Zomboid with new functionality.
+            """.trimIndent()
+            )
+        }
+    }
+}
+
+signing {
+    sign(publishing.publications["maven"])
 }
 
 tasks.create<ProjectZomboidLaunchTask>("pzLaunch64") {
