@@ -1,14 +1,13 @@
 package info.pzss.zomboid.extender.framework.advice
 
-import com.google.common.base.CaseFormat
+import info.pzss.zomboid.extender.framework.ZomboidExtensionContext
+import info.pzss.zomboid.extender.framework.config.ConfigSource
 import mu.KotlinLogging
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.After
 import org.aspectj.lang.annotation.Aspect
 import zombie.config.ConfigOption
 
-
-private fun String.toEnvironmentVariableName() = "ZOMBOID_${replace('.', '_')}"
 
 private val logger = KotlinLogging.logger {}
 
@@ -18,13 +17,16 @@ private val logger = KotlinLogging.logger {}
  */
 @Aspect
 open class ConfigAdvice {
+
+    private val configSources: List<ConfigSource>
+        get() = ZomboidExtensionContext.INSTANCE.configSources
+
     @After("initialization (public zombie.config.*ConfigOption.new(..)) && !initialization (public zombie.config.ConfigOption.new(..))")
     open fun serverOptionsFromEnvVars(joinPoint: JoinPoint) {
         val option = joinPoint.`this` as ConfigOption
-        val optionName = CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, option.name.toEnvironmentVariableName())
-        val env = System.getenv()
+        val optionValue = configSources.firstNotNullOfOrNull { it.getOptionValueAsString(option.name) }
 
-        env[optionName]?.also {
+        optionValue?.also {
             option.parse(it)
         }
     }

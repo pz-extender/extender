@@ -21,6 +21,18 @@ class ZomboidScriptEventDispatcher(val metaResolver: ZomboidScriptEventMetaResol
         handlerList.handlers.add(handler)
     }
 
+    fun <T: ZomboidScriptEvent> dispatch(event: T) {
+        val eventName = metaResolver.nameForClass(event.javaClass)
+        val chain = handlerChainsByName[eventName] ?: return
+        val handlers = chain.handlers as List<ZomboidScriptEventHandler<ZomboidScriptEvent>>
+
+        for (handler in handlers) {
+            if (!handler.handle(event)) {
+                return
+            }
+        }
+    }
+
     fun dispatch(eventName: String, arguments: Array<Any>): Boolean {
         val chain = handlerChainsByName[eventName] ?: return true
         val factory = chain.factory as ZomboidScriptEventFactory<ZomboidScriptEvent>

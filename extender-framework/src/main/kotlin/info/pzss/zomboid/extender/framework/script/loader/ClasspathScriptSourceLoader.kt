@@ -14,6 +14,7 @@ class ClasspathScriptSourceLoader : ZomboidScriptSourceLoader {
             .enableClassInfo()
             .acceptClasspathElementsContainingResourcePath("media/pz-script/*")
             .scan()
+
         scan.use { scanResult ->
             scanResult.getResourcesWithExtension("kts")
                 .filter { it.path.endsWith("pz.kts") }
@@ -21,7 +22,7 @@ class ClasspathScriptSourceLoader : ZomboidScriptSourceLoader {
 
             scanResult.getSubclasses(ZomboidScript::class.java)
                 .loadClasses()
-                .forEach() {
+                .forEach {
                     emit(ZomboidScriptSource.CompiledResource(it as Class<out ZomboidScript>))
                 }
         }

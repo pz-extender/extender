@@ -59,6 +59,4 @@ class ZomboidScriptCompilationConfiguration : ScriptCompilationConfiguration({
     compilationConfiguration = ZomboidScriptCompilationConfiguration::class,
     evaluationConfiguration = ZomboidScriptEvaluationConfiguration::class
 )
-open class ZomboidScript {
-
-}
+open class ZomboidScript

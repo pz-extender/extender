@@ -4,10 +4,7 @@ import info.pzss.zomboid.extender.api.ZomboidScript
 import io.github.classgraph.Resource
 import kotlinx.coroutines.flow.Flow
 import java.nio.file.Path
-import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchKey
-import java.nio.file.WatchService
-import kotlin.io.path.toPath
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
 import kotlin.script.experimental.api.implicitReceivers
@@ -40,8 +37,6 @@ sealed interface ZomboidScriptSource {
         }
 
         override fun name() = ty.simpleName
-
-        override fun watchChanges(watcher: WatchService) = ZomboidScriptSourceWatcher.Unsupported
     }
 
     class SourceResource(private val resource: Resource) : ZomboidScriptSource {
@@ -54,16 +49,6 @@ sealed interface ZomboidScriptSource {
         }
 
         override fun name() = resource.pathRelativeToClasspathElement.substringAfterLast("/")
-
-        override fun watchChanges(watcher: WatchService) = when (resource.uri.scheme) {
-            "file" -> {
-                val resourcePath = resource.uri.toPath()
-                val key = resourcePath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE)
-
-                ZomboidScriptSourceWatcher.Key(key)
-            }
-            else -> ZomboidScriptSourceWatcher.Unsupported
-        }
     }
 
     class SourceFile(private val path: Path) : ZomboidScriptSource {
@@ -76,9 +61,6 @@ sealed interface ZomboidScriptSource {
         }
 
         override fun name() = path.fileName.toString()
-
-        override fun watchChanges(watcher: WatchService) =
-            ZomboidScriptSourceWatcher.Key(path.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY))
     }
 
     fun evaluate(
@@ -88,6 +70,4 @@ sealed interface ZomboidScriptSource {
     )
 
     fun name(): String
-
-    fun watchChanges(watcher: WatchService): ZomboidScriptSourceWatcher
 }

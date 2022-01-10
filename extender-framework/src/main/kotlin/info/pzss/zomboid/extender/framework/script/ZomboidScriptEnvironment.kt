@@ -35,7 +35,7 @@ class ZomboidScriptEnvironment(
             val scriptSourceRx = merge(*allScriptSourceRx)
 
             scriptSourceRx.collect { source ->
-                logger.info { "Loading ZomboidScript named ${source.name()}" }
+                logger.info { "Loading ZomboidScript ${source.name()}" }
                 source.evaluate(host, compileConfiguration, evaluationConfiguration)
             }
         }

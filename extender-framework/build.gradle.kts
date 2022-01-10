@@ -9,7 +9,6 @@ val aspectj by configurations.creating
 
 dependencies {
     api(project(":extender-api"))
-    implementation("org.junit.jupiter:junit-jupiter:5.7.0")
 
     compileOnly(pzGameApi())
     compileOnly(pzGameLibs())
@@ -20,7 +19,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
-    implementation("org.aspectj:aspectjrt:1.9.7")
+    api("org.aspectj:aspectjrt:1.9.7")
     aspectj("org.aspectj:aspectjweaver:1.9.7")
 
     implementation("io.github.classgraph:classgraph:4.8.138")
@@ -31,6 +30,8 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
 
     implementation("com.google.guava:guava:31.0.1-jre")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
 }
 
 tasks.create<ProjectZomboidLaunchTask>("pzLaunch64") {
