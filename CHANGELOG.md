@@ -5,6 +5,7 @@
 ### Added
 
 - Randomized world elements (zones, buildings, vehicles) can now be customized by scripts.
+- Dead survivors can be randomized from scripts when generating a basic building.
 
 ### Changed
 

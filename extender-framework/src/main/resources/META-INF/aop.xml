@@ -4,6 +4,7 @@
         <aspect name="info.pzss.zomboid.extender.framework.advice.LifecycleAdvice"/>
         <aspect name="info.pzss.zomboid.extender.framework.advice.LoggerAdvice"/>
         <aspect name="info.pzss.zomboid.extender.framework.advice.ScriptingAdvice"/>
+        <aspect name="info.pzss.zomboid.extender.framework.advice.WorldAdvice"/>
 
         <weaver options="-verbose -showWeaveInfo">
         </weaver>
