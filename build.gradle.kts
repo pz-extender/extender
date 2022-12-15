@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.changelog") version ("1.3.1")
     kotlin("jvm") version ("1.6.10") apply (false)
     `maven-publish`
+    `idea`
 }
 
 fun Project.properties(key: String) = findProperty(key)?.toString()
