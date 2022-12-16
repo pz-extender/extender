@@ -88,6 +88,8 @@ jobs:
 
       - name: Qodana - Code Inspection
         uses: JetBrains/qodana-action@v4.2.1
+        env:
+          GRADLE_OPTS: "-PzomboidPath=${{ runner.workspace }}/zomboid"
 
       - name: Qodana - Show Results Files
         run: |
