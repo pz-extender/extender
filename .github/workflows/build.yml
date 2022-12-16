@@ -6,6 +6,10 @@ on:
   # Trigger the workflow on any pull request
   pull_request:
 
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
 
   gradleValidation:
@@ -28,7 +32,6 @@ jobs:
         os:
           - windows-latest
           - ubuntu-latest
-          - macos-latest
     steps:
       - name: Fetch Sources
         uses: actions/checkout@v2.4.0
@@ -48,6 +51,13 @@ jobs:
              +login anonymous \
              +app_update 380870 \
              +quit
+        shell: bash
+        env:
+          ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
+
+      - name: Show contents of Zomboid install
+        run: |
+          find "$ZOMBOID_PATH" -maxdepth 2 -ls
         shell: bash
         env:
           ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
@@ -82,8 +92,15 @@ jobs:
         env:
           ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
 
+      - name: Override Gradle properties
+        run: |
+          sed -i.bak '/zomboidPath=/d' gradle.properties
+          echo "zomboidPath=/data/project/zomboid" >> gradle.properties
+
       - name: Qodana - Code Inspection
-        uses: JetBrains/qodana-action@v4.2.1
+        uses: JetBrains/qodana-action@v2022.3.0
+        env:
+          GRADLE_OPTS: "-PzomboidPath=zomboid"
 
       - name: Qodana - Show Results Files
         run: |
@@ -108,7 +125,6 @@ jobs:
         os:
           - windows-latest
           - ubuntu-latest
-          - macos-latest
 
     steps:
 
@@ -119,7 +135,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 17
           cache: gradle
 
       - name: Setup steamcmd
@@ -169,25 +185,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 17
           cache: gradle
-
-      # Set environment variables
-      - name: Export Properties
-        id: properties
-        shell: bash
-        run: |
-          PROPERTIES="$(./gradlew properties --console=plain -q)"
-          NAME="$(echo "$PROPERTIES" | grep "^name:" | cut -f2- -d ' ')"
-          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
-          CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
-          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-
-          echo "::set-output name=version::$VERSION"
-          echo "::set-output name=artifact::$ARTIFACT"
-          echo "::set-output name=changelog::$CHANGELOG"
 
       - name: Setup steamcmd
         uses: CyberAndrii/setup-steamcmd@v1
@@ -208,8 +207,31 @@ jobs:
         env:
           ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
 
-      - name: Build
-        run: ./gradlew build -PzomboidPath=${{ runner.workspace }}/zomboid
+      # Set environment variables
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties -PzomboidPath=${{ runner.workspace }}/zomboid --console=plain -q)"
+          NAME="$(echo "$PROPERTIES" | grep "^name:" | cut -f2- -d ' ')"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          CHANGELOG="$(./gradlew -PzomboidPath=${{ runner.workspace }}/zomboid getChangelog --unreleased --no-header --console=plain -q)"
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+
+          echo "::set-output name=version::$VERSION"
+          echo "::set-output name=artifact::$ARTIFACT"
+          echo "::set-output name=changelog::$CHANGELOG"
+
+      - name: Build Distribution
+        run: ./gradlew build distZip -PzomboidPath=${{ runner.workspace }}/zomboid
+
+      - name: Upload distribution
+        uses: actions/upload-artifact@v3
+        with:
+          name: distribution-zip
+          path: ${{ github.workspace }}/extender-framework/build/dist/pz-extender-${{ steps.properties.outputs.version }}.zip
 
   # Prepare a draft release for GitHub Releases page for the manual verification
   # If accepted and published, release workflow would be triggered
@@ -245,3 +267,15 @@ jobs:
           ${{ needs.build.outputs.changelog }}
           EOM
           )"
+
+      - name: Download prepared distribution
+        uses: actions/download-artifact@v3
+        with:
+          name: distribution-zip
+
+      - name: Upload distribution to Release Draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload v${{ needs.build.outputs.version }} \
+            pz-extender-${{ steps.properties.outputs.version }}.zip

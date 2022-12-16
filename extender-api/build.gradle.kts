@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-    compileOnlyApi(mapOf("name" to "project-zomboid", "version" to "latest", "group" to "com.theindiestone.pz"))
-    implementation(pzGameLibs())
+    compileOnlyApi(pzGameApi())
+    compileOnlyApi(pzGameLibs())
 
     api(kotlin("script-runtime"))
     implementation(kotlin("stdlib"))

@@ -5,7 +5,7 @@ pluginManagement {
     repositories {
         mavenLocal()
         gradlePluginPortal()
-        maven("https://repo.openrs2.org/repository/openrs2/")
+        maven("https://www.jetbrains.com/intellij-repository/releases/")
     }
 }
 include("extender-api")
