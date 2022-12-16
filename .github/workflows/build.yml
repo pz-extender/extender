@@ -278,4 +278,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload v${{ needs.build.outputs.version }} \
-            pz-extender-${{ steps.properties.outputs.version }}.zip
+            pz-extender-${{ needs.build.outputs.version  }}.zip
