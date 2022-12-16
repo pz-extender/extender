@@ -40,7 +40,7 @@ jobs:
         uses: CyberAndrii/setup-steamcmd@v1
 
       - name: Setup Project Zomboid cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ runner.workspace }}/zomboid
           key: pz-${{ matrix.os }}-${{ hashFiles('.github/current.pzversion') }}
@@ -77,7 +77,7 @@ jobs:
         uses: CyberAndrii/setup-steamcmd@v1
 
       - name: Setup Project Zomboid cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ runner.workspace }}/zomboid
           key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
@@ -142,7 +142,7 @@ jobs:
         uses: CyberAndrii/setup-steamcmd@v1
 
       - name: Setup Project Zomboid cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ runner.workspace }}/zomboid
           key: pz-${{ matrix.os }}-${{ hashFiles('.github/current.pzversion') }}
@@ -192,7 +192,7 @@ jobs:
         uses: CyberAndrii/setup-steamcmd@v1
 
       - name: Setup Project Zomboid cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ runner.workspace }}/zomboid
           key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
