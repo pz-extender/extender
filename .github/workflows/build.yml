@@ -95,7 +95,7 @@ jobs:
       - name: Override Gradle properties
         run: |
           sed -i.bak '/zomboidPath=/d' gradle.properties
-          echo "zomboidPath=./zomboid" >> gradle.properties
+          echo "zomboidPath=/data/project/zomboid" >> gradle.properties
 
       - name: Qodana - Code Inspection
         uses: JetBrains/qodana-action@v2022.3.0
