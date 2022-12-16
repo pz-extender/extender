@@ -95,14 +95,12 @@ jobs:
       - name: Override Gradle properties
         run: |
           sed -i.bak '/zomboidPath=/d' gradle.properties
-          echo "zomboidPath=$ZOMBOID_PATH" >> gradle.properties
-        env:
-          ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
+          echo "zomboidPath=./zomboid/projectzomboid" >> gradle.properties
 
       - name: Qodana - Code Inspection
         uses: JetBrains/qodana-action@v4.2.1
         env:
-          GRADLE_OPTS: "-PzomboidPath=${{ runner.workspace }}/zomboid"
+          GRADLE_OPTS: "-PzomboidPath=zomboid"
 
       - name: Qodana - Show Results Files
         run: |
