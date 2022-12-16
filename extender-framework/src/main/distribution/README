@@ -1,0 +1,20 @@
+# Configuring pz-extender
+
+This README file should have been extracted to the same folder containing your ProjectZomboid64.json file.
+To enable pz-extender support, edit ProjectZomboid64.json and add the following new entries under the respective keys.
+
+NOTE: Make sure you're ADDING to the existing elements and not replacing them.
+
+    {
+        "classpath": [
+            "extender-framework-0.1.0-all.jar"
+        ],
+        "vmArgs": [
+            "-javaagent:libs/aspectjweaver-1.9.7.jar",
+            "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+            "--add-opens=java.base/java.io=ALL-UNNAMED",
+            "--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED"
+        ]
+    }

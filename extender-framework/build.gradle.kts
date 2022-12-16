@@ -1,9 +1,11 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import info.pzss.zomboid.gradle.ProjectZomboidLaunchTask
 
 plugins {
     kotlin("jvm")
     `maven-publish`
     signing
+    id("com.github.johnrengelman.shadow")
 }
 
 val aspectj by configurations.creating
@@ -13,7 +15,6 @@ dependencies {
 
     compileOnly(pzGameApi())
     compileOnly(pzGameLibs())
-    runtimeOnly(pzGameRuntime())
 
     implementation(kotlin("scripting-jvm-host"))
     implementation(kotlin("scripting-jvm"))
@@ -66,7 +67,23 @@ tasks.create<ProjectZomboidLaunchTask>("pzLaunch64") {
             "--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED"
         )
     )
-    classpath = configurations.runtimeClasspath.get() + sourceSets.main.get().runtimeClasspath
+
+    launchSettings.set("ProjectZomboid64.json")
+    classpath = configurations.runtimeClasspath.get() + sourceSets.main.get().runtimeClasspath + pzGameRuntime()
 
     dependsOn(tasks.classes)
+}
+
+val shadowJar = tasks.getByName<ShadowJar>("shadowJar")
+
+tasks.create<Zip>("distZip") {
+    archiveFileName.set("pz-extender-${project.version}.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("dist"))
+
+    into("libs") {
+        from(aspectj)
+    }
+
+    from(layout.projectDirectory.dir("src/main/distribution").file("README"))
+    from(shadowJar.outputs)
 }

@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("info.pzss.zomboid") version ("0.1.7")
     id("org.jetbrains.changelog") version ("1.3.1")
+    id("com.github.johnrengelman.shadow") version ("7.1.2")
     kotlin("jvm") version ("1.6.10") apply (false)
     `maven-publish`
     idea
