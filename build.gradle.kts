@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("info.pzss.zomboid") version ("0.1.3")
+    id("info.pzss.zomboid") version ("0.1.7")
     id("org.jetbrains.changelog") version ("1.3.1")
     kotlin("jvm") version ("1.6.10") apply (false)
     `maven-publish`
-    `idea`
+    idea
 }
 
 fun Project.properties(key: String) = findProperty(key)?.toString()
@@ -17,6 +17,13 @@ projectZomboid {
 changelog {
     version.set(project.version as? String)
     groups.set(emptyList())
+}
+
+idea {
+    module {
+        isDownloadJavadoc = true
+        isDownloadSources = true
+    }
 }
 
 allprojects {
