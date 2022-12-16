@@ -222,6 +222,12 @@ jobs:
       - name: Build
         run: ./gradlew build -PzomboidPath=${{ runner.workspace }}/zomboid
 
+      - name: Upload distribution
+        uses: actions/upload-artifact@v3
+        with:
+          name: distribution-zip
+          path: ${{ github.workspace }}/extender-framework/build/dist/pz-extender-${{ steps.properties.outputs.version }}.zip
+
   # Prepare a draft release for GitHub Releases page for the manual verification
   # If accepted and published, release workflow would be triggered
   releaseDraft:
@@ -256,3 +262,15 @@ jobs:
           ${{ needs.build.outputs.changelog }}
           EOM
           )"
+
+      - name: Download prepared distribution
+        uses: actions/download-artifact@v3
+        with:
+          name: distribution-zip
+
+      - name: Upload distribution to Release Draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload v${{ needs.build.outputs.version }} \
+            pz-extender-${{ steps.properties.outputs.version }}.zip
