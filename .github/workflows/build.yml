@@ -56,6 +56,13 @@ jobs:
         env:
           ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
 
+      - name: Show contents of Zomboid install
+        run: |
+          find "$ZOMBOID_PATH" -maxdepth 2 -ls
+        shell: bash
+        env:
+          ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
+
   codeInspection:
     name: Code Inspection
     needs:
