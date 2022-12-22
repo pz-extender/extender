@@ -22,7 +22,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
     api("org.aspectj:aspectjrt:1.9.7")
-    aspectj("org.aspectj:aspectjweaver:1.9.7")
+    aspectj("org.aspectj:aspectjweaver:1.9.19")
 
     implementation("io.github.classgraph:classgraph:4.8.138")
 
