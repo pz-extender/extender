@@ -24,7 +24,7 @@ dependencies {
     api("org.aspectj:aspectjrt:1.9.7")
     aspectj("org.aspectj:aspectjweaver:1.9.7")
 
-    implementation("io.github.classgraph:classgraph:4.8.138")
+    implementation("io.github.classgraph:classgraph:4.8.157")
 
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("ch.qos.logback:logback-classic:1.2.10")
