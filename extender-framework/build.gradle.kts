@@ -28,7 +28,7 @@ dependencies {
 
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("ch.qos.logback:logback-classic:1.2.10")
-    implementation("ch.qos.logback:logback-core:1.2.10")
+    implementation("ch.qos.logback:logback-core:1.4.6")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
 
     implementation("com.google.guava:guava:31.0.1-jre")
