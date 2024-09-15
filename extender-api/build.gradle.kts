@@ -5,10 +5,6 @@ plugins {
     `java-library`
 }
 
-repositories {
-    pzLocal()
-}
-
 dependencies {
     compileOnlyApi(pzGameApi())
     compileOnlyApi(pzGameLibs())
@@ -17,7 +13,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("scripting-jvm"))
 
-    implementation("com.google.guava:guava:31.0.1-jre")
+    implementation("com.google.guava:guava:33.2.1-jre")
 }
 
 publishing {

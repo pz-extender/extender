@@ -1,5 +1,4 @@
 rootProject.name = "pz-extender"
-include("extender-framework")
 
 pluginManagement {
     repositories {
@@ -8,4 +7,6 @@ pluginManagement {
         maven("https://www.jetbrains.com/intellij-repository/releases/")
     }
 }
+
 include("extender-api")
+include("extender-framework")

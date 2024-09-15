@@ -1,15 +1,16 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("info.pzss.zomboid") version ("0.1.7")
+    id("info.pzss.zomboid") version ("0.2.0")
     id("org.jetbrains.changelog") version ("1.3.1")
     id("com.github.johnrengelman.shadow") version ("7.1.2")
-    kotlin("jvm") version ("1.6.10") apply (false)
+    kotlin("jvm") version ("2.0.20") apply (false)
     `maven-publish`
     idea
 }
 
-fun Project.properties(key: String) = findProperty(key)?.toString()
+fun Project.properties(key: String) = findProperty(key)?.toString() ?: error("Unable to find property $key")
 
 projectZomboid {
     zomboidPath.set(properties("zomboidPath"))
@@ -34,7 +35,7 @@ allprojects {
 
     repositories {
         mavenCentral()
-        pzLocal()
+        mavenLocal()
     }
 
     plugins.withType<MavenPublishPlugin> {
@@ -104,14 +105,14 @@ allprojects {
             withSourcesJar()
             withJavadocJar()
 
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
         }
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = "11"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 

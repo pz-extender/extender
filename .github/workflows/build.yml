@@ -34,7 +34,7 @@ jobs:
           - ubuntu-latest
     steps:
       - name: Fetch Sources
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v4
 
       - name: Setup steamcmd
         uses: CyberAndrii/setup-steamcmd@v1
@@ -98,7 +98,7 @@ jobs:
           echo "zomboidPath=/data/project/zomboid" >> gradle.properties
 
       - name: Qodana - Code Inspection
-        uses: JetBrains/qodana-action@v2022.3.0
+        uses: JetBrains/qodana-action@v2024.1
         env:
           GRADLE_OPTS: "-PzomboidPath=zomboid"
 
@@ -110,7 +110,7 @@ jobs:
           SARIF_PATH: ${{ runner.temp }}/qodana
 
       - name: Qodana - Upload Report
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
   test:
@@ -129,20 +129,22 @@ jobs:
     steps:
 
       - name: Fetch Sources
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: zulu
-          java-version: 17
-          cache: gradle
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Setup steamcmd
         uses: CyberAndrii/setup-steamcmd@v1
 
       - name: Setup Project Zomboid cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ runner.workspace }}/zomboid
           key: pz-${{ matrix.os }}-${{ hashFiles('.github/current.pzversion') }}
@@ -162,7 +164,7 @@ jobs:
 
       - name: Collect Test Results
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ runner.os }}
           path: ${{ github.workspace }}/build/reports/tests
@@ -178,21 +180,29 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v4
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: zulu
           java-version: 17
-          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-cleanup: true
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-use-agree: "yes"
+          dependency-graph: generate-and-submit
 
       - name: Setup steamcmd
         uses: CyberAndrii/setup-steamcmd@v1
 
       - name: Setup Project Zomboid cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ runner.workspace }}/zomboid
           key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
@@ -228,7 +238,7 @@ jobs:
         run: ./gradlew build distZip -PzomboidPath=${{ runner.workspace }}/zomboid
 
       - name: Upload distribution
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: distribution-zip
           path: ${{ github.workspace }}/extender-framework/build/dist/pz-extender-${{ steps.properties.outputs.version }}.zip
@@ -244,7 +254,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v4
 
       # Remove old release drafts by using the curl request for the available releases with draft flag
       - name: Remove Old Release Drafts
@@ -269,7 +279,7 @@ jobs:
           )"
 
       - name: Download prepared distribution
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: distribution-zip
 
