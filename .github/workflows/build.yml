@@ -46,6 +46,7 @@ jobs:
           key: pz-${{ matrix.os }}-${{ hashFiles('.github/current.pzversion') }}
 
       - name: Install Project Zomboid
+        if: steps.zomboid-install.outputs.cache-hit != 'true'
         run: |
           steamcmd +force_install_dir "$ZOMBOID_PATH" \
              +login anonymous \
@@ -83,6 +84,7 @@ jobs:
           key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
 
       - name: Install Project Zomboid
+        if: steps.zomboid-install.outputs.cache-hit != 'true'
         run: |
           steamcmd +force_install_dir "$ZOMBOID_PATH" \
              +login anonymous \
@@ -105,6 +107,8 @@ jobs:
 
       - name: Qodana - Code Inspection
         uses: JetBrains/qodana-action@v2024.1
+        with:
+          args: --volume=${{ runner.workspace }}/zomboid:/data/project/zomboid
         env:
           GRADLE_OPTS: "-PzomboidPath=zomboid"
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1707253383 }}
@@ -158,6 +162,7 @@ jobs:
           key: pz-${{ matrix.os }}-${{ hashFiles('.github/current.pzversion') }}
 
       - name: Install Project Zomboid
+        if: steps.zomboid-install.outputs.cache-hit != 'true'
         run: |
           steamcmd +force_install_dir "$ZOMBOID_PATH" \
              +login anonymous \
@@ -215,6 +220,7 @@ jobs:
           key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
 
       - name: Install Project Zomboid
+        if: steps.zomboid-install.outputs.cache-hit != 'true'
         run: |
           steamcmd +force_install_dir "$ZOMBOID_PATH" \
              +login anonymous \
