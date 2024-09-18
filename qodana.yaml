@@ -1,6 +1,5 @@
 version: "1.0"
 profile:
   name: qodana.recommended
-linter: jetbrains/qodana-jvm:2024.1
+ide: QDJVM
 projectJDK: "21"
-bootstrap: ./gradlew :projectZomboidJar

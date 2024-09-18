@@ -103,20 +103,14 @@ jobs:
           sed -i.bak '/zomboidPath=/d' gradle.properties
           echo "zomboidPath=${{ runner.workspace }}/zomboid" >> gradle.properties
 
-      - name: Generate pz jar
-        run: ./gradlew :projectZomboidJar
-
       - name: Override Gradle properties
         run: |
           sed -i.bak '/zomboidPath=/d' gradle.properties
           echo "zomboidPath=/data/project/zomboid" >> gradle.properties
 
       - name: Qodana - Code Inspection
-        uses: JetBrains/qodana-action@v2024.1
-        with:
-          args: --volume=${{ runner.workspace }}/zomboid:/data/project/zomboid
+        uses: JetBrains/qodana-action@v2024.2
         env:
-          GRADLE_OPTS: "-PzomboidPath=zomboid"
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1707253383 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
