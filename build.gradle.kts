@@ -39,6 +39,12 @@ idea {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
 allprojects {
     group = properties("group")
     description = properties("description")
