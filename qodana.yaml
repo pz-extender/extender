@@ -3,4 +3,3 @@ profile:
   name: qodana.recommended
 linter: jetbrains/qodana-jvm:2024.1
 projectJDK: "21"
-bootstrap: ./gradlew :projectZomboidJar
