@@ -36,14 +36,15 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v4
 
-      - name: Setup steamcmd
-        uses: CyberAndrii/setup-steamcmd@v1
-
       - name: Setup Project Zomboid cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ runner.workspace }}/zomboid
-          key: pz-${{ matrix.os }}-${{ hashFiles('.github/current.pzversion') }}
+          key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
+
+      - name: Setup steamcmd
+        uses: CyberAndrii/setup-steamcmd@v1
+        if: steps.zomboid-install.outputs.cache-hit != 'true'
 
       - name: Install Project Zomboid
         if: steps.zomboid-install.outputs.cache-hit != 'true'
@@ -74,14 +75,15 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v4
 
-      - name: Setup steamcmd
-        uses: CyberAndrii/setup-steamcmd@v1
-
       - name: Setup Project Zomboid cache
         uses: actions/cache@v4
         with:
           path: ${{ runner.workspace }}/zomboid
           key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
+
+      - name: Setup steamcmd
+        uses: CyberAndrii/setup-steamcmd@v1
+        if: steps.zomboid-install.outputs.cache-hit != 'true'
 
       - name: Install Project Zomboid
         if: steps.zomboid-install.outputs.cache-hit != 'true'
@@ -152,14 +154,15 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Setup steamcmd
-        uses: CyberAndrii/setup-steamcmd@v1
-
       - name: Setup Project Zomboid cache
         uses: actions/cache@v4
         with:
           path: ${{ runner.workspace }}/zomboid
-          key: pz-${{ matrix.os }}-${{ hashFiles('.github/current.pzversion') }}
+          key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
+
+      - name: Setup steamcmd
+        uses: CyberAndrii/setup-steamcmd@v1
+        if: steps.zomboid-install.outputs.cache-hit != 'true'
 
       - name: Install Project Zomboid
         if: steps.zomboid-install.outputs.cache-hit != 'true'
@@ -210,14 +213,15 @@ jobs:
           build-scan-terms-of-use-agree: "yes"
           dependency-graph: generate-and-submit
 
-      - name: Setup steamcmd
-        uses: CyberAndrii/setup-steamcmd@v1
-
       - name: Setup Project Zomboid cache
         uses: actions/cache@v4
         with:
           path: ${{ runner.workspace }}/zomboid
           key: pz-ubuntu-latest-${{ hashFiles('.github/current.pzversion') }}
+
+      - name: Setup steamcmd
+        uses: CyberAndrii/setup-steamcmd@v1
+        if: steps.zomboid-install.outputs.cache-hit != 'true'
 
       - name: Install Project Zomboid
         if: steps.zomboid-install.outputs.cache-hit != 'true'
@@ -229,7 +233,6 @@ jobs:
         shell: bash
         env:
           ZOMBOID_PATH: ${{ runner.workspace }}/zomboid
-
       # Set environment variables
       - name: Export Properties
         id: properties
