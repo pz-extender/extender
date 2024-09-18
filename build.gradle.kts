@@ -1,3 +1,5 @@
+import org.jetbrains.gradle.ext.settings
+import org.jetbrains.gradle.ext.taskTriggers
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -25,6 +27,14 @@ idea {
     module {
         isDownloadJavadoc = true
         isDownloadSources = true
+    }
+
+    project {
+        settings {
+            taskTriggers {
+                resolveTasks(tasks.getByPath(":projectZomboidJar"))
+            }
+        }
     }
 }
 
