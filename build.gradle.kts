@@ -7,6 +7,7 @@ plugins {
     id("info.pzss.zomboid") version ("0.2.0")
     id("org.jetbrains.changelog") version ("1.3.1")
     id("com.github.johnrengelman.shadow") version ("7.1.2")
+    id("org.jetbrains.gradle.plugin.idea-ext") version("1.1.8")
     kotlin("jvm") version ("2.0.20") apply (false)
     `maven-publish`
     idea
