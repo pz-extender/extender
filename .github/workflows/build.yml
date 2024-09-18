@@ -114,7 +114,7 @@ jobs:
       - name: Qodana - Code Inspection
         uses: JetBrains/qodana-action@v2024.1
         with:
-          args: --volume=${{ runner.workspace }}/zomboid:/data/project/zomboid --volume=${{ runner.workspace }}/build:/data/project/build
+          args: --volume=${{ runner.workspace }}/zomboid:/data/project/zomboid, --volume=${{ runner.workspace }}/build:/data/project/build
         env:
           GRADLE_OPTS: "-PzomboidPath=zomboid"
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1707253383 }}
